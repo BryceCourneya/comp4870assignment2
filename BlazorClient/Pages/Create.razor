@@ -1,0 +1,46 @@
+﻿@page "/create"
+@inject HttpClient httpClient
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+<h1>Create speaker</h1>
+
+<EditForm Model="@speaker" OnValidSubmit="@HandleAdd">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText placeholder="First Name" id="firstName" @bind-Value="@speaker.FirstName" />
+    <br />
+    <InputText placeholder="Last Name" id="lastName" @bind-Value="@speaker.LastName" />
+    <br />
+    <InputText placeholder="Email" id="email" @bind-Value="@speaker.Email" />
+    <br />
+    <InputText placeholder="Mobile Number" id="mobileNumber" @bind-Value="@speaker.MobileNumber" />
+    <br />
+    <InputText placeholder="Area of Specialization" id="areaOfSpecialization" @bind-Value="@speaker.AreaOfSpecialization" />
+    <br />
+    <InputText placeholder="City of Residence" id="cityOfResidence" @bind-Value="@speaker.CityOfResidence" />
+    <br />
+    <InputText placeholder="Province of Residence" id="provinceOfResidence" @bind-Value="@speaker.ProvinceOfResidence" />
+    <br />
+    <InputText placeholder="Employer" id="employer" @bind-Value="@speaker.Employer" />
+    <br />
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    string baseUrl = "https://localhost:44377/";
+
+    private Speaker speaker = new Speaker();
+
+    private async void HandleAdd()
+    {
+        string endpoint = $"{baseUrl}api/speakers";
+
+        speaker.SpeakerId = Guid.NewGuid().ToString();
+
+        await httpClient.SendJsonAsync(HttpMethod.Post, endpoint, speaker);
+
+        navigationManager.NavigateTo($"/");
+    }
+}
+

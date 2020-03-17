@@ -1,0 +1,4 @@
+C:\Users\Bryce\source\repos\Assignment2\SpeakerAPI\obj\Debug\netstandard2.1\SpeakerAPI.csprojAssemblyReference.cache
+C:\Users\Bryce\source\repos\Assignment2\SpeakerAPI\obj\Debug\netstandard2.1\SpeakerAPI.csproj.CoreCompileInputs.cache
+C:\Users\Bryce\source\repos\Assignment2\SpeakerAPI\obj\Debug\netstandard2.1\SpeakerAPI.AssemblyInfoInputs.cache
+C:\Users\Bryce\source\repos\Assignment2\SpeakerAPI\obj\Debug\netstandard2.1\SpeakerAPI.AssemblyInfo.cs

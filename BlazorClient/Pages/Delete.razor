@@ -1,0 +1,51 @@
+﻿@page "/delete/{speakerId}"
+@inject HttpClient httpClient
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+<h1>Delete speaker</h1>
+
+<EditForm Model="@speaker" OnValidSubmit="@HandleDelete">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText placeholder="First Name" id="firstName" disabled="true" @bind-Value="@speaker.FirstName" />
+    <br />
+    <InputText placeholder="Last Name" id="lastName" disabled="true" @bind-Value="@speaker.LastName" />
+    <br />
+    <InputText placeholder="Email" id="email" disabled="true" @bind-Value="@speaker.Email" />
+    <br />
+    <InputText placeholder="Mobile Number" id="mobileNumber" disabled="true" @bind-Value="@speaker.MobileNumber" />
+    <br />
+    <InputText placeholder="Area of Specialization" id="areaOfSpecialization" disabled="true" @bind-Value="@speaker.AreaOfSpecialization" />
+    <br />
+    <InputText placeholder="City of Residence" id="cityOfResidence" disabled="true" @bind-Value="@speaker.CityOfResidence" />
+    <br />
+    <InputText placeholder="Province of Residence" id="provinceOfResidence" disabled="true" @bind-Value="@speaker.ProvinceOfResidence" />
+    <br />
+    <InputText placeholder="Employer" id="employer" disabled="true" @bind-Value="@speaker.Employer" />
+    <br />
+    <button type="submit">Delete</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string speakerId { get; set; }
+    string baseUrl = "https://localhost:44377/";
+    private Speaker speaker = new Speaker();
+
+    protected override async Task OnInitializedAsync()
+    {
+        speaker = await httpClient.GetJsonAsync<Speaker>($"{baseUrl}api/speakers/{speakerId}");
+    }
+
+    private async void HandleDelete()
+    {
+        string endpoint = $"{baseUrl}api/speakers/" + speaker.SpeakerId;
+
+        await httpClient.SendJsonAsync(HttpMethod.Delete, endpoint, speaker);
+
+        navigationManager.NavigateTo($"/");
+    }
+
+}
+

@@ -1,0 +1,50 @@
+﻿@page "/edit/{speakerId}"
+@inject HttpClient httpClient
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+<h1>Edit speaker</h1>
+
+<EditForm Model="@speaker" OnValidSubmit="@HandleEdit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText placeholder="First Name" id="firstName" @bind-Value="@speaker.FirstName" />
+    <br />
+    <InputText placeholder="Last Name" id="lastName" @bind-Value="@speaker.LastName" />
+    <br />
+    <InputText placeholder="Email" id="email" @bind-Value="@speaker.Email" />
+    <br />
+    <InputText placeholder="Mobile Number" id="mobileNumber" @bind-Value="@speaker.MobileNumber" />
+    <br />
+    <InputText placeholder="Area of Specialization" id="areaOfSpecialization" @bind-Value="@speaker.AreaOfSpecialization" />
+    <br />
+    <InputText placeholder="City of Residence" id="cityOfResidence" @bind-Value="@speaker.CityOfResidence" />
+    <br />
+    <InputText placeholder="Province of Residence" id="provinceOfResidence" @bind-Value="@speaker.ProvinceOfResidence" />
+    <br />
+    <InputText placeholder="Employer" id="employer" @bind-Value="@speaker.Employer" />
+    <br />
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string speakerId { get; set; }
+    string baseUrl = "https://localhost:44377/";
+    private Speaker speaker = new Speaker();
+
+    protected override async Task OnInitializedAsync() {
+        speaker = await httpClient.GetJsonAsync<Speaker>($"{baseUrl}api/speakers/{speakerId}");
+    }
+
+    private async void HandleEdit()
+    {
+        string endpoint = $"{baseUrl}api/speakers/" + speaker.SpeakerId;
+
+        await httpClient.SendJsonAsync(HttpMethod.Put, endpoint, speaker);
+
+        navigationManager.NavigateTo($"/");
+    }
+
+}
+

@@ -1,0 +1,66 @@
+﻿@page "/"
+@inject HttpClient httpClient
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+<h1>Speakers</h1>
+
+<p>Created by Bryce Courneya and Perry Li</p>
+
+@if (speakers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <button @onclick="@Add" class="btn btn-success">Add</button>
+    <br/>
+
+    <table class='table table-hover'>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in speakers)
+            {
+                <tr>
+                    <td>@item.FirstName @item.LastName</td>
+                    <td><a class="btn btn-success btn-sm" @onclick="@(() => Edit(item))">Edit</a></td>
+                    <td><a class="btn btn-danger btn-sm" @onclick="@(() => Delete(item))">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    Speaker[] speakers;
+    string baseUrl = "https://localhost:44377/";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await load();
+    }
+
+    protected async Task load()
+    {
+        speakers = await httpClient.GetJsonAsync<Speaker[]>($"{baseUrl}api/speakers");
+    }
+
+    protected void Edit(Speaker speaker)
+    {
+        navigationManager.NavigateTo($"/edit/{speaker.SpeakerId}");
+    }
+
+    protected void Delete(Speaker speaker)
+    {
+        navigationManager.NavigateTo($"/delete/{speaker.SpeakerId}");
+    }
+    protected void Add()
+    {
+        navigationManager.NavigateTo($"/create");
+    }
+}
+
